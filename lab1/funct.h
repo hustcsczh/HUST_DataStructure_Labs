@@ -216,7 +216,8 @@ status LoadList(SqList &L,char FileName[])
 {
     // 请在这里补充代码，完成本关任务
     /********** Begin *********/
-	if(strcmp(FileName,"D:/HUST-DataStructure-Labs/lab1/data/1.dat")!=0 && strcmp(FileName,"D:/HUST-DataStructure-Labs/lab1/data/2.dat")!=0)
+	if(strcmp(FileName,"D:/HUST-DataStructure-Labs/lab1/data/1.dat")!=0 && 
+		strcmp(FileName,"D:/HUST-DataStructure-Labs/lab1/data/2.dat")!=0)
 		return ERROR;
 	if(L.elem!=NULL)
 		return INFEASIBLE;

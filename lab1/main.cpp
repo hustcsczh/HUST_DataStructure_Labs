@@ -1,7 +1,6 @@
 #include"def.h"
 #include"funct.h"
    
-
 int main(void)
 {
 	lists.length = 0;
@@ -291,7 +290,7 @@ int main(void)
 			printf("请选择操作输入 0.退出系统  1. 表示将线性表存入文件， 2. 表示将文件读入线性表：");
 			scanf("%d", &opp);
 			getchar();
-			FILE *fp;char filename[30];int i;
+			FILE *fp;char filename[50];int i;
 			if(opp==1)
 			{
 				printf("请输入线性表的id(0-9): ");
