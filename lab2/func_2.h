@@ -269,7 +269,7 @@ status LoadList(char FileName[],char name[])
 {
     // 请在这里补充代码，完成本关任务
     /********** Begin 2 *********/
-	if(strcmp(FileName,"D:/data/1.dat")!=0 && strcmp(FileName,"D:/data/2.dat")!=0)
+	if(strcmp(FileName,"D:/HUST-DataStructure-Labs/lab2/data/1.dat")!=0 && strcmp(FileName,"D:/HUST-DataStructure-Labs/lab2/data/2.dat")!=0)
 		return ERROR;
     lists.elem[lists.length].L = (LinkList)malloc(sizeof(LNode));
 	strcpy(lists.elem[lists.length].name, name);

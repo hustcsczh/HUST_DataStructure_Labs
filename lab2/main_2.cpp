@@ -326,7 +326,7 @@ int main(void)
 			printf("请选择操作输入 0.退出系统  1. 表示将线性表存入文件， 2. 表示将文件读入线性表：");
 			scanf("%d", &opp);
 			getchar();
-			FILE *fp;char filename[30];int i;
+			FILE *fp;char filename[50];int i;
 			if(opp==1){
 				printf("请输入线性表的 name: ");
 				char name[10];
@@ -336,12 +336,12 @@ int main(void)
 				if(id==-1) 
 					printf("线性表 %s 不存在\n",name);
 				else{
-					strcpy(filename, "D:/data/3.dat");
+					strcpy(filename, "D:/HUST-DataStructure-Labs/lab2/data/3.dat");
 					int result = SaveList(lists.elem[id].L, filename);
 					if(result==INFEASIBLE)
 						printf("线性表为空\n");
 					else
-						printf("成功存入路径为 D:/data/3.dat 的文件中\n");
+						printf("成功存入路径为 D:/HUST-DataStructure-Labs/lab2/data/3.dat 的文件中\n");
 				}
 				printf("点击Enter进行下一步");
 				getchar();
@@ -355,7 +355,7 @@ int main(void)
 				if(id!=-1) 
 					printf("线性表 %s 已存在\n",name);
 				else{
-					printf("可选的文件地址： D:/data/1.dat   or  D:/data/2.dat\n");
+					printf("可选的文件地址： D:/HUST-DataStructure-Labs/lab2/data/1.dat   or  D:/HUST-DataStructure-Labs/lab2/data/2.dat\n");
 					printf("请输入文件路径: ");
 					gets(filename);
 					int result=LoadList(filename,name);
