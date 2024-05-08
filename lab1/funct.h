@@ -1,4 +1,3 @@
-
 int cmp(const void *a,const void *b) {
 	return *(int*)a-*(int*)b;
 }
@@ -24,6 +23,7 @@ status DestroyList(SqList& L)
 		return INFEASIBLE;
 	free(L.elem);
 	L.elem = NULL;
+	lists.length--;
 	return OK;
 	/********** End **********/
 }
@@ -216,14 +216,14 @@ status LoadList(SqList &L,char FileName[])
 {
     // 请在这里补充代码，完成本关任务
     /********** Begin *********/
-	if(strcmp(FileName,"D:/HUST-DataStructure-Labs/lab1/data/1.dat")!=0 && 
-		strcmp(FileName,"D:/HUST-DataStructure-Labs/lab1/data/2.dat")!=0)
+	if(strcmp(FileName,"D:/data/1.dat")!=0 && strcmp(FileName,"D:/data/2.dat")!=0)
 		return ERROR;
 	if(L.elem!=NULL)
 		return INFEASIBLE;
 	L.listsize = LIST_INIT_SIZE;
 	L.length = 0;
 	L.elem = (ElemType *)malloc(sizeof(ElemType)*LIST_INIT_SIZE);
+	lists.length++;
 	FILE *fp=fopen(FileName,"r");
 	int a, i = 0;
 	while(fscanf(fp,"%d ",&a)==1)
@@ -320,7 +320,7 @@ status SubArrayNum(SqList L,int K)
 }
 void My_print(void)
 {
-        system("cls");
+	
 	    printf("      Menu for Linear Table On Sequence Structure \n");
         printf("-------------------------------------------------\n");
         printf("    	  1.  InitList      7.  LocateElem\n");
@@ -334,12 +334,12 @@ void My_print(void)
         printf("    	  15. SortList      16.Save_in_file\n");
         printf("    	  0. Exit\n");
         printf("-------------------------------------------------\n");
-		printf("线性表：");
+		printf("%d个线性表已初始化\n",lists.length);
 		for (int i = 0; i < 10;i++)
 		{
 			if(lists.elem[i].L.elem!=NULL)
-				printf("%d ", i);
+				printf("%s ", lists.elem[i].name);
 		}
-		printf("已初始化\n");
 		printf("请选择你的操作[0~16]:"); 
 }
+   
