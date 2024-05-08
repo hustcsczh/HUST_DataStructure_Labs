@@ -6,7 +6,8 @@ int main(void)
 	lists.listsize = 10;
 	for (int i = 0; i < 10;i++)
 		lists.elem[i].L.elem = NULL;
-	SqList L;  int op=1;
+	int op=1;
+	SqList L;
 	int count = 0;
 	while(op)
 	{
