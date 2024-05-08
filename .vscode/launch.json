@@ -29,8 +29,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "d:/data structure/shiyan/1.xianxingbiao",
-      "program": "d:/data structure/shiyan/1.xianxingbiao/build/Debug/outDebug",
+      "cwd": "d:/HUST-DataStructure-Labs/lab1",
+      "program": "d:/HUST-DataStructure-Labs/lab1/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

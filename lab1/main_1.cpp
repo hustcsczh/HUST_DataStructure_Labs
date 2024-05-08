@@ -1,5 +1,4 @@
-#include"def.h"
-#include"funct.h"
+#include"funct_1.h"
 
 int main(void)
 {
