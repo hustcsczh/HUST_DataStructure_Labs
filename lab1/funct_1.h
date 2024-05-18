@@ -311,7 +311,7 @@ status SubArrayNum(SqList L,int K)
 		{
 			for (int j = i; j < L.length;j++)
 			{
-				sum += L.elem[i];
+				sum += L.elem[j];
 				if(sum==K)
 					count++;
 			}
