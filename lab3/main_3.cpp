@@ -24,14 +24,14 @@ int main(void)
 				scanf("%s", name);
 				getchar();
 				if (check(name)!=-1)
-					printf("二叉树 %s 已存在\n",name);
+					printf("二叉树 %s 已存在",name);
 				else
 				{
-                    DEF definition[100];
                     BiTree T;
                     TElemType e;
-					printf("按definition输入二叉树T\n");
+					DEF definition[100];
 					int ans,i=0,key;
+					printf("按definition输入二叉树T\n");
                     do {
                     	scanf("%d %d %s",&definition[i].pos,&definition[i].data.key,definition[i].data.others);
                     } while (definition[i++].pos);
@@ -39,7 +39,7 @@ int main(void)
                     lists.elem[lists.length].T=T;
 	                strcpy(lists.elem[lists.length].name,name);
 	                lists.length++;
-					printf("二叉树 %s 创建成功!\n",name);
+					printf("二叉树 %s 创建成功!",name);
                     PreOrderTraverse(T, visit);
                     InOrderTraverse(T, visit);
 				}
@@ -137,11 +137,11 @@ int main(void)
 					printf("输入你想查找的节点的key: ");
 		   			scanf("%d", &e);
 					getchar();
-					BiTNode *p=GetSibling(lists.elem[id].T,e);
+					BiTNode *p=LocateNode(lists.elem[id].T,e);
 					if(p) printf("%d,%s",p->data.key,p->data.others);
-					else printf("无兄弟结点");
+					else printf("不存在该结点");
 				}
-	        	printf("点击Enter进行下一步");
+	        	printf("\n点击Enter进行下一步");
 				getchar();
 				break;
 		   	}
@@ -167,7 +167,8 @@ int main(void)
 		        	else
 			        	printf("赋值成功\n");
 				}
-			    printf("点击Enter进行下一步");
+				LevelOrderTraverse(lists.elem[id].T,visit);
+			    printf("\n点击Enter进行下一步");
 			    getchar();
 			    break;
 		  	}
@@ -211,10 +212,12 @@ int main(void)
 					int result =InsertNode(lists.elem[id].T,e,LR,value);
 					if(result==ERROR)
 						printf("赋值操作失败\n");
-		   			else
+		   			else{
 			   			printf("赋值操作成功\n");
+						LevelOrderTraverse(lists.elem[id].T,visit);
+					}
 				}
-				printf("点击Enter进行下一步");
+				printf("\n点击Enter进行下一步");
 				getchar();
 				break;
 		  	}
@@ -233,10 +236,12 @@ int main(void)
 					int result = DeleteNode(lists.elem[id].T,e);
 		   			if(result==ERROR)
 			   			printf("删除错误\n");
-		   			else
+		   			else{
 			   			printf("删除成功\n");
+						LevelOrderTraverse(lists.elem[id].T,visit);
+					}
 				}
-				printf("点击Enter进行下一步");
+				printf("\n点击Enter进行下一步");
 				getchar();
 				break;
 		  	}
@@ -250,7 +255,7 @@ int main(void)
 				if(id==-1) 
 					printf("二叉树 %s 不存在\n",name);
 				else
-					PreOrderTraverse(T, visit);
+					PreOrderTraverse(lists.elem[id].T, visit);
 				printf("\n点击Enter进行下一步");
 				getchar();
 				break;
@@ -279,8 +284,10 @@ int main(void)
 				int id=check(name);
 				if(id==-1) 
 					printf("二叉树 %s 不存在\n",name);
-				else
+				else{
+					printf("\n后序遍历--------------------------\n");
 		   			PostOrderTraverse(lists.elem[id].T,visit);
+				}
 				printf("\n点击Enter进行下一步");
 				getchar();
 				break;
@@ -350,19 +357,21 @@ int main(void)
 			    else{
 				    InvertTree(lists.elem[id].T);
 				    printf("二叉树翻转成功\n");
+					LevelOrderTraverse(lists.elem[id].T,visit);
 			    }
 			    printf("点击Enter进行下一步");
 			    getchar();
 			    break;
 		    }
-		/*case 18:
+		case 18:
 		{
 			int opp;
 			do{
 			printf("请选择操作输入 0.退出系统  1. 表示将二叉树存入文件， 2. 表示将文件读入二叉树：");
 			scanf("%d", &opp);
 			getchar();
-			FILE *fp;char filename[50];int i;
+			FILE *fp;
+			char filename[50];int i;
 			if(opp==1){
 				printf("请输入二叉树的 name: ");
 				char name[10];
@@ -372,12 +381,12 @@ int main(void)
 				if(id==-1) 
 					printf("二叉树 %s 不存在\n",name);
 				else{
-					strcpy(filename, "D:/HUST-DataStructure-Labs/lab2/data/3.dat");
-					int result = SaveList(lists.elem[id].T, filename);
+					strcpy(filename, "D:/HUST-DataStructure-Labs/lab3/data/3.dat");
+					int result = SaveBiTree(lists.elem[id].T, filename);
 					if(result==INFEASIBLE)
 						printf("二叉树为空\n");
 					else
-						printf("成功存入路径为 D:/HUST-DataStructure-Labs/lab2/data/3.dat 的文件中\n");
+						printf("成功存入路径为 D:/HUST-DataStructure-Labs/lab3/data/3.dat 的文件中\n");
 				}
 				printf("点击Enter进行下一步");
 				getchar();
@@ -391,29 +400,28 @@ int main(void)
 				if(id!=-1) 
 					printf("二叉树 %s 已存在\n",name);
 				else{
-					printf("可选的文件地址： D:/HUST-DataStructure-Labs/lab2/data/1.dat   or  D:/HUST-DataStructure-Labs/lab2/data/2.dat\n");
+					printf("可选的文件地址： D:/HUST-DataStructure-Labs/lab3/data/1.dat   or  D:/HUST-DataStructure-Labs/lab3/data/2.dat");
 					printf("请输入文件路径: ");
 					gets(filename);
-					int result=LoadList(filename,name);
+					T = NULL;
+					int result=LoadBiTree(T,filename);
 					if(result==INFEASIBLE)
 						printf("文件地址错误\n");
 					else
 						printf("已将文件内容读入二叉树 %s 中\n",name);
-					ListTraverse(lists.elem[lists.length].L);
+					LevelOrderTraverse(T, visit);
+					lists.elem[lists.length].T=T;
+	                strcpy(lists.elem[lists.length].name,name);
 					lists.length++;
 				}
-				printf("点击Enter进行下一步");
+				printf("\n点击Enter进行下一步");
 				getchar();
 			}
 			else
 				printf("请重新输入\n");
 			} while(opp != 1 && opp != 2);
-		}*/
+		}
 	    }
 	    printf("欢迎下次再使用本系统！\n");
     }
 }
-
-
-
-
