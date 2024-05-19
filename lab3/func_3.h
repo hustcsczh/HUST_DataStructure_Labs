@@ -27,6 +27,7 @@ status deQueue(QUEUE &Q,BiTree &e)
     Q.length--;
     return 1;
 }
+
 void inistack(STACK &S)
 {
    S.top1=0;
@@ -49,6 +50,8 @@ BiTree pop(STACK &S)
     S.top1--;
     return e;
 }
+#define free free0
+#undef free
 void visit(BiTree T)
 {
     printf(" %d,%s",T->data.key,T->data.others);
@@ -94,8 +97,8 @@ status ClearBiTree(BiTree &T)
 {
     // 请在这里补充代码，完成本关任务
     /********** Begin *********/
-    static BiTree p = T;
     if(T){
+		static BiTree p = T;
         ClearBiTree(T->lchild);
         ClearBiTree(T->rchild);
         if(T!=p){
@@ -127,17 +130,18 @@ status BiTreeDepth(BiTree T)
 BiTNode* LocateNode(BiTree T,KeyType e)
 //查找结点
 {
-    // 请在这里补充代码，完成本关任务
-    /********** Begin *********/
-    static BiTree p=NULL;
-    if(T&&p==NULL){
-        if(T->data.key==e)
-            p = T;
-        LocateNode(T->lchild,e);
-        LocateNode(T->rchild, e);
+    if(T){
+        if(T->data.key == e){
+            return T;
+        }
+        BiTNode* leftResult = LocateNode(T->lchild, e);
+        if(leftResult)
+            return leftResult;
+        BiTNode* rightResult = LocateNode(T->rchild, e);
+		if(rightResult)
+        	return rightResult;
     }
-    return p;
-    /********** End **********/
+    return NULL;
 }
 status Assign(BiTree &T,KeyType e,TElemType value)
 //实现结点赋值。此题允许通过增加其它函数辅助实现本关任务
@@ -159,9 +163,9 @@ status Assign(BiTree &T,KeyType e,TElemType value)
 }
 BiTNode* GetSibling(BiTree T,KeyType e)   //获得兄弟节点
 {
-    static BiTree p=NULL;
-    if(T&&p==NULL){
-        if(T->lchild&&T->lchild->data.key==e){
+	if(T){
+		static BiTree p;
+		if(T->lchild&&T->lchild->data.key==e){
             p = T->rchild;
             return p;
         }
@@ -169,27 +173,34 @@ BiTNode* GetSibling(BiTree T,KeyType e)   //获得兄弟节点
             p = T->lchild;
             return p;
         }
-        GetSibling(T->lchild,e);
-        GetSibling(T->rchild, e);
+		BiTNode* leftResult = GetSibling(T->lchild, e);
+        if(leftResult)
+            return leftResult;
+        BiTNode* rightResult = GetSibling(T->rchild, e);
+		if(rightResult)
+        	return rightResult;
     }
-    return p;
+	else
+		return NULL;
 }
 BiTNode* Get(BiTree T,KeyType e)          //获得双亲节点
 {
-    static BiTree p=NULL;
-    if(T&&p==NULL){
-        if(T->lchild&&T->lchild->data.key==e){
-            p = T;
-            return p;
-        }
+    if(T){
+		if(T->lchild&&T->lchild->data.key==e){
+			return T;
+		}
         else if(T->rchild&&T->rchild->data.key==e){
-            p = T;
-            return p;
+            return T;
         }
-        Get(T->lchild,e);
-        Get(T->rchild, e);
+        BiTNode* leftResult = Get(T->lchild, e);
+        if(leftResult)
+            return leftResult;
+        BiTNode* rightResult = Get(T->rchild, e);
+		if(rightResult)
+        	return rightResult;
     }
-    return p;
+    else
+		return NULL;
 }
 BiTNode* Getright(BiTree p)               //获得左子树最右节点
 {
@@ -308,15 +319,7 @@ status DeleteNode(BiTree &T,KeyType e)
 }
 status PreOrderTraverse(BiTree T,void (*visit)(BiTree))       //前序遍历
 {
-    /*if (T)
-    {
-        visit(T);
-        PreOrderTraverse(T->lchild,visit);
-        PreOrderTraverse(T->rchild,visit);
-    }
-    return OK;*/
-    //先序遍历二叉树
-	 printf("\n先序遍历--------------------------\n");
+ 	printf("\n先序遍历--------------------------\n");
     STACK s;
 	inistack(s);
 	BiTree p;
@@ -338,14 +341,8 @@ status PreOrderTraverse(BiTree T,void (*visit)(BiTree))       //前序遍历
 }
 status InOrderTraverse(BiTree T,void (*visit)(BiTree))        //中序遍历
 {
-    /*if (T)
-    {
-        InOrderTraverse(T->lchild,visit);
-        visit(T);
-        InOrderTraverse(T->rchild,visit);
-    }
-    return OK;*/
-	 printf("\n中序遍历--------------------------\n");
+  
+	printf("\n中序遍历--------------------------\n");
     STACK s;
 	inistack(s);
     BiTree p;
@@ -367,7 +364,6 @@ status InOrderTraverse(BiTree T,void (*visit)(BiTree))        //中序遍历
 }
 status PostOrderTraverse(BiTree T,void (*visit)(BiTree))      //后序遍历
 {
-	 printf("\n后序遍历--------------------------\n");
     if (T)
     {
         PostOrderTraverse(T->lchild,visit);
@@ -375,35 +371,6 @@ status PostOrderTraverse(BiTree T,void (*visit)(BiTree))      //后序遍历
         visit(T);
     }
     return OK;
-    /*STACK s;
-	inistack(s);
-    BiTree p, p1, p2;
-    p = T;
-	while (p||s.top1)
-	{
-        if(p){
-            
-            push(s,p);
-            p1 = p;
-            p = p->lchild;
-        }
-        else{
-            p=pop(s);
-            if(p1->rchild){
-                visit(p);
-            }
-            else{
-                if(p1->rchild){
-                    p = p1->rchild;
-                }
-                if(!p->lchild&&!p->rchild){
-                    p2 = pop(s);
-                    visit(p2);
-                }
-
-            }
-        }*/
-
 }
 status LevelOrderTraverse(BiTree T,void (*visit)(BiTree))    //层序遍历
 {
@@ -470,7 +437,7 @@ void PreOrderTraverse(BiTree T)
 {
     if (T)
     {
-        printf(" %d,%s",T->data.key,T->data.others);
+        printf("%d %s",T->data.key,T->data.others);
         PreOrderTraverse(T->lchild);
         PreOrderTraverse(T->rchild);
     }
@@ -484,22 +451,6 @@ void InOrderTraverse(BiTree T)
         InOrderTraverse(T->rchild);
     }
 }
-/*status SaveBiTree(BiTree T, char FileName[])
-//将二叉树的结点数据写入到文件FileName中
-{
-   
-
-
-   
-}
-status LoadBiTree(BiTree &T,  char FileName[])
-{
-   
-    
-
-
-    
-}*/
 status check(char name[])
 {
 	for (int i = 0; i < lists.length;i++)
@@ -514,16 +465,19 @@ void My_print(void)
        system("cls");
 	    printf("      Menu for Linear Table On Sequence Structure \n");
         printf("-------------------------------------------------\n");
-        printf("    	  1.  InitList      7.  LocateElem\n");
-	  	printf("    	  2.  DestroyList   8.  PriorElem\n");
-	  	printf("    	  3.  ClearList     9.  NextElem\n");
-        printf("    	  4.  ListEmpty     10. ListInsert\n");
-        printf("    	  5.  ListLength    11. ListDelete\n");
-        printf("    	  6.  GetElem       12. ListTraverse\n");
+        printf("1.  CreateBiTree	8.  GetSibling\n");
+	  	printf("2.  DestroyBitree	9.  InsertNode\n");
+	  	printf("3.  ClearBiTree		10. DeleteNode\n");
+        printf("4.  BiTreeEmpty		11. PreOrderTraverse\n");
+        printf("5.  BiTreeDepth		12. InOrderTraverse\n");
+        printf("6.  LocateNode		13. PostOrderTraverse\n");
+        printf("7.  Assign		14. LevelOrderTraverse\n");
 		printf("-------------------------------------------------\n");
-        printf("    	  13. reverseList   14.RemoveNthFromEnd\n");
-        printf("    	  15. SortList      16.Save_in_file\n");
-        printf("    	  0. Exit\n");
+        printf("15.MaxPatSum\n");
+        printf("16.LowestCommmonAncestor\n");
+        printf("17.RemoveNthFromEnd\n");
+        printf("18.Save_in_file\n");
+        printf("0.Exit\n");
         printf("-------------------------------------------------\n");
 		printf("%d个二叉树已初始化\n",lists.length);
 		for (int i = 0; i < lists.length;i++)
@@ -533,3 +487,71 @@ void My_print(void)
 		}
 		printf("请选择你的操作[0~16]:"); 
 }
+status SaveBiTree(BiTree T, char FileName[])
+//将二叉树的结点数据写入到文件FileName中
+{
+	FILE *fp=fopen(FileName,"w");
+	int _pos[10] = {1,1};
+	DEF * def[10];
+	BiTree QUEUE[MAXLENGTH];
+    int front = 0, rear = 0;
+	if(T)
+        QUEUE[rear++] = T;
+   	while (front!=rear)
+    {
+		T = QUEUE[front];
+		def[front] = (DEF *)malloc(sizeof(DEF));
+		def[front]->pos = _pos[front];
+		def[front]->data.key = T->data.key;		
+		strcpy(def[front]->data.others , T->data.others);
+		if(T->lchild&&!T->rchild){
+           	QUEUE[rear++] = T->lchild;
+			_pos[rear-1] = _pos[front] * 2;
+		}
+		else if (T->rchild&&!T->lchild){
+			QUEUE[rear++] = T->rchild;
+			_pos[rear-1] = _pos[front]*2+1;
+		}
+		else if(T->lchild&&T->rchild){
+			QUEUE[rear++] = T->lchild;
+			QUEUE[rear++] = T->rchild;
+			_pos[rear-2] =_pos[front]* 2;
+			_pos[rear-1] = _pos[rear-2] + 1;
+		}
+		else
+			;
+		front++;
+	}
+	def[front] = (DEF *)malloc(sizeof(DEF));
+	def[front]->pos = 0;
+	def[front]->data.key = 0;
+	strcpy(def[front]->data.others,"null");
+	int i = 0;
+	while (def[i]->data.key!=0)
+	{
+		fprintf(fp,"%d %d %s ", def[i]->pos, def[i]->data.key, def[i]->data.others);
+		i++;
+	}
+	fprintf(fp,"%d %d %s ", 0, 0,"null");
+	fclose(fp);
+	return OK;
+}
+status LoadBiTree(BiTree &T,  char FileName[])
+
+{
+	T=(BiTree)malloc(sizeof(BiTNode));
+	FILE *fp=fopen(FileName,"r");
+	DEF def[10];
+	int a, i = -1;
+	do
+	{
+		i++;
+		fscanf(fp, "%d ", &def[i].pos);
+		fscanf(fp, "%d ", &def[i].data.key);
+		fscanf(fp, "%s ", def[i].data.others);
+	} while (def[i].pos!=0);
+    fclose(fp);
+	CreateBiTree(T, def);
+	return OK;
+}
+
