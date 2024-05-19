@@ -36,16 +36,20 @@ int main(void)
                     	scanf("%d %d %s",&definition[i].pos,&definition[i].data.key,definition[i].data.others);
                     } while (definition[i++].pos);
                     ans=CreateBiTree(T,definition);
-                    lists.elem[lists.length].T=T;
-	                strcpy(lists.elem[lists.length].name,name);
-	                lists.length++;
-					printf("二叉树 %s 创建成功!",name);
-                    PreOrderTraverse(T, visit);
-                    InOrderTraverse(T, visit);
+					if(ans==ERROR)
+						printf("输入错误\n");
+					else{
+						lists.elem[lists.length].T=T;
+	                	strcpy(lists.elem[lists.length].name,name);
+	                	lists.length++;
+						printf("二叉树 %s 创建成功!",name);
+                    	PreOrderTraverse(T, visit);
+                    	InOrderTraverse(T, visit);
+					}
+                	getchar();
+                	printf("\n点击Enter进行下一步");getchar();
+					break;
 				}
-                getchar();
-                printf("\n点击Enter进行下一步");getchar();
-				break;
 			}
 		case 2:
 			{
