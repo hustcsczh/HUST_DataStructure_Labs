@@ -67,6 +67,8 @@ status CreateBiTree(BiTree &T,DEF definition[])
 {
     int i=0,j;
     static BiTNode *p[100];
+    if(!definition[i].pos)
+        return ERROR;
     while (j=definition[i].pos)
     {
         p[j]=(BiTNode *)malloc(sizeof(BiTNode));
@@ -163,28 +165,31 @@ status Assign(BiTree &T,KeyType e,TElemType value)
 }
 BiTNode* GetSibling(BiTree T,KeyType e)   //获得兄弟节点
 {
-	if(T){
-		static BiTree p;
-		if(T->lchild&&T->lchild->data.key==e){
+    BiTNode* p = NULL; 
+    if (T) {
+        if (T->lchild && T->lchild->data.key == e) {
             p = T->rchild;
             return p;
-        }
-        else if(T->rchild&&T->rchild->data.key==e){
+        } else if (T->rchild && T->rchild->data.key == e) {
             p = T->lchild;
             return p;
         }
-		BiTNode* leftResult = GetSibling(T->lchild, e);
-        if(leftResult)
+
+        BiTNode* leftResult = GetSibling(T->lchild, e);
+        if (leftResult) {
             return leftResult;
+        }
+
         BiTNode* rightResult = GetSibling(T->rchild, e);
-		if(rightResult)
-        	return rightResult;
+        if (rightResult) {
+            return rightResult;
+        }
     }
-	else
-		return NULL;
+    return p; 
 }
 BiTNode* Get(BiTree T,KeyType e)          //获得双亲节点
 {
+	BiTNode* p = NULL; 
     if(T){
 		if(T->lchild&&T->lchild->data.key==e){
 			return T;
@@ -199,8 +204,7 @@ BiTNode* Get(BiTree T,KeyType e)          //获得双亲节点
 		if(rightResult)
         	return rightResult;
     }
-    else
-		return NULL;
+	return p;
 }
 BiTNode* Getright(BiTree p)               //获得左子树最右节点
 {
